@@ -7,6 +7,7 @@ public class PointsView : MonoBehaviour
 {
     public Text currencyText;
     public GameOperator gameOperator;
+    public bool updated = false;
 
     public void Awake()
     {
@@ -29,6 +30,11 @@ public class PointsView : MonoBehaviour
     public void UpdateView(GameState gameState)
     {
         currencyText.text = "Coins: " + gameState.points;
+    }
+
+    public void Update()
+    {
+        updated = false;
     }
     private void OnDestroy()
     {

@@ -14,7 +14,7 @@ public class Client : DataEndPoint
     int port;
     TcpClient clientSocket;
     NetworkStream stream;
-    int bufferSize = 2048;
+    int bufferSize = 16384;
     byte[] buffer;
 
     public Client(string host, int port)

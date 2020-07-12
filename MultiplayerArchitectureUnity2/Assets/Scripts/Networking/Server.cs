@@ -31,8 +31,8 @@ public class Server
     {
         TcpClient clientSocket = serverSocket.EndAcceptTcpClient(AR);
         serverSocket.BeginAcceptTcpClient(AcceptClients, null);
-        clientSocket.ReceiveBufferSize = 2048;
-        clientSocket.SendBufferSize = 2048;
+        clientSocket.ReceiveBufferSize = 16384;
+        clientSocket.SendBufferSize = 16384;
         Debug.Log($"Connection from {clientSocket.Client.RemoteEndPoint}...");
         
         //Find next empty slot for incoming connection...
@@ -108,7 +108,7 @@ public class Server
 
 public class ClientHandle
 {
-    public static int bufferSize = 2048;
+    public static int bufferSize = 16384;
 
     public TcpClient socket;
 

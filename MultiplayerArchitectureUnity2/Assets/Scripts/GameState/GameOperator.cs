@@ -20,12 +20,13 @@ public class GameOperator : MonoBehaviour
     public void InitSingleplayer()
     {
         InitCommon();
-        networkOperator.maxPlayers = 1;
+        networkOperator.maxPlayers = 0;
         Server s = networkOperator.RunServer();
         gameExecutor = new MultiplayerServerCommandsExecutor(gameState, s);
         gameExecutor.Execute(new JoinGameCommand(true, PlayerType.HUMAN, "LocalPlayer"));
         gameExecutor.Execute(new AcknowledgeLoadCommand(0));
         Debug.Log("Inited singleplayer");
+        StartSimulation();
     }
 
     /// <summary>
@@ -52,6 +53,15 @@ public class GameOperator : MonoBehaviour
         gameExecutor.Execute(new JoinGameCommand(true, PlayerType.HUMAN, "ServerMaster"));
         gameExecutor.Execute(new AcknowledgeLoadCommand(0));
         Debug.Log("Inited multiplayer server");
+        //StartSimulation();
+    }
+
+    public void StartSimulation()
+    {
+        DefaultGameSimulation simulation = new DefaultGameSimulation(gameExecutor, gameState);
+        DefaultGameTimer timer = new DefaultGameTimer(1f);
+        StartCoroutine(timer.WorldSimulation(simulation));
+        Debug.Log("Started game simulation");
     }
 
     public void InitCommon()

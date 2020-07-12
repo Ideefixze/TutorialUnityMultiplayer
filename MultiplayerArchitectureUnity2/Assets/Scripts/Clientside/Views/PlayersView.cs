@@ -8,6 +8,7 @@ public class PlayersView : MonoBehaviour
     public Text playerInfo;
     public GameOperator gameOperator;
     public GameState gameState;
+    public bool updated = false;
 
     public void Awake()
     {
@@ -38,6 +39,7 @@ public class PlayersView : MonoBehaviour
         {
             gameOperator.gameExecutor.Execute(new SwapPlayerSlotCommand(gameState.playerList.GetClientData().ID, gameState.playerList.GetClientData().ID + 1));
         }
+        updated = false;
     }
     private void OnDestroy()
     {
