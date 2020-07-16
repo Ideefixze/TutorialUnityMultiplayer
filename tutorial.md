@@ -1,5 +1,5 @@
 # Unity Multiplayer and Architecture
-## Introduction
+## Part One: Introduction
 
 With growing intrest in multiplayer games, many of you, game developers may stumble upon a problem: *how do I make a multiplayer that works?* Unity no longer supports UNET and it is a small challenge to make your own networking. However your solution will be the best, because you, as developer, know what your game needs. Also it is crucial that if you want to have a multiplayer game, you gotta think about it from the start. Singleplayer is just one player multiplayer, but multiplayer can't be a singleplayer for many players. Of course if we are talking about playing via the Internet.
 
@@ -66,10 +66,10 @@ In the simplest form of the Command Design pattern (or at least variation we are
 
 So: 
 ```
-ItemUseCommand : ICommand{
+public class ItemUseCommand : ICommand{
  Item item;
  
- ItemUseCommand(Item item)
+ public ItemUseCommand(Item item)
  {
   this.item = item;
  }
@@ -85,6 +85,21 @@ public void Execute(GameData gameData)
 Concrete Executor would just take an Command that inheirits from ICommand and will execute them. However there are many ways we can execute it. If this is client, we have to send this ICommand to the server so the server can execute it first and since our method is encapsulated into an object it can be easily send via network! If we are testing something we can make our concrete IExecutor to save every Command so we can track our game and all changes in GameData to find bugs. What about replay? We just save all Commands in an Array and their timestamp and reexecute them from the start.
 
 Command Design Pattern is a huge and powerful tool in structuring your code especially in networking as Commands can be serialized and send to other computers. You can modify your command with ```undo()``` that reverts changes to the GameData. Do you know now how CTRL+Z works? :)
+
+### Bigger picture
+
+To make it more clear, I want to give you a simple example how this will work in a multiplayer game.
+
+1) I press button that executes function that sends my command into my one IExecutor.
+2) I execute Command C on my *ClientExecutor* CE that sends data to the server.
+3) Server receives Command C as serialized JSON.
+4) It has all the data needed to execute on *ServerExecutor* - executes it locally and sends Command C again.
+5) We handle our data in such a way that we have our *ClientExecutor* and additional method that executes a Command but this time: locally without sending it to the server.
+6) Our GameData has changed. Update our game: play a sound, change UI or do something else.
+
+
+## Part Two: Oh no, so we gotta start programming it now?
+
 
 
 
