@@ -33,7 +33,8 @@ If we take a look at my example with healing we can see that some solutions are 
 #### A - local execution and sending
 *I will change data in my game and send information about it to the server. Server will send information to other players..*
 
-I heal my avatar locally, I set my health from 10/100 to 100/100. I send information to the server: "hey, I've healed my guy!" and it updates its game state and sends this message to other players. My enemy attacked me before he got the message that I've healed myself and he sees it as his victory. He slains me and sends info that he leathally attacked me. Server takes information: reduces my health from 100 to 70 and I got it. 
+I heal my avatar locally, I set my health from 10/100 to 100/100. I send information to the server: "hey, I've healed my guy!" and it updates its game state and sends this message to other players. My enemy attacked and killed me before he got the message that I've healed myself. In his eyes I am dead. He sends info that he leathally attacked me. Server takes information: reduces my health from 100 to 70 and I got consistent game data with the server but not with other player.
+(Often the server **is** some third player that hosts our game) 
 
 This solution may cause a lot problems in very sticky situations causing our game datas to differ, when they should be consistent among all players.
  
@@ -48,10 +49,46 @@ This makes our client "stupid" while the server has the authority over everythin
 
 In this tutorial I'll try to teach you how to make multiplayer game architecture with authoritative server using TCP as our protocol. 
 
-## Commands? Executions?
+## Command Design Pattern
+
+This tutorial used some words as: "commands". Am I some fan of strategy games to talk like that? Yes, but in this case I've already knew that you will get here. We will be using a Command Design Pattern to execute our changes in the game data. Shortly speaking it is very lovely way to structure your code, especially with multiplayer game. If you really understand it, you will never want to go back and write games in any other way, because it is a simple yet powerful way to make your life simpler.
+
+### What is Command Design Pattern?
+
+Lets say we have interface of some Item: potion, scroll, bomb? You name it. And they all have something in common: they can be used. Potion heals you, scroll turns you into a cat, bomb makes an epic explosion. So we have our inventory of these items and evertime we click Z,X or C we use them and the game will just execute an interface method ``` Item.use() ```. That is a simple and good solution, but in Object Oriented Programming we can do more than that.
+
+However there are some bugs in our game, so we have to log in file that we executed our ```Item.use()```. Moreover we want to add a feature to our game: replays. In our simple solution there would be a problem in doing this. Of course it would be doable, but there is a better way to execute a method.
+
+In the simplest form of the Command Design pattern (or at least variation we are going to use) we have interfaces:
+
+- ICommand - with method ```execute()```
+- IExecutor - with method ```executeCommand(Command)```, don't have to be an interface
+
+So: 
+```
+ItemUseCommand : ICommand{
+ Item item;
+ 
+ ItemUseCommand(Item item)
+ {
+  this.item = item;
+ }
+
+public void Execute(GameData gameData)
+{
+ item.use(gameData); 
+}
+
+}
+```
+
+Concrete Executor would just take an Command that inheirits from ICommand and will execute them. However there are many ways we can execute it. If this is client, we have to send this ICommand to the server so the server can execute it first and since our method is encapsulated into an object it can be easily send via network! If we are testing something we can make our concrete IExecutor to save every Command so we can track our game and all changes in GameData to find bugs. What about replay? We just save all Commands in an Array and their timestamp and reexecute them from the start.
+
+Command Design Pattern is a huge and powerful tool in structuring your code especially in networking as Commands can be serialized and send to other computers. You can modify your command with ```undo()``` that reverts changes to the GameData. Do you know now how CTRL+Z works? :)
 
 
 
-  
 
+
+ 
 
