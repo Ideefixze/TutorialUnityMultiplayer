@@ -62,7 +62,7 @@ However there are some bugs in our game, so we have to log in file that we execu
 In the simplest form of the Command Design pattern (or at least variation we are going to use) we have interfaces:
 
 - ICommand - with method ```execute()```
-- IExecutor - with method ```executeCommand(Command)```, don't have to be an interface
+- IExecutor - with method ```executeCommand(Command)```
 
 So: 
 ```
