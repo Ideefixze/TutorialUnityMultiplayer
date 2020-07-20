@@ -169,14 +169,14 @@ public class ServerExecutor : IExecutor
  }
 }
 
-public class ServerExecutor : IExecutor {
+public class ClientExecutor : IExecutor {
  
- void Execute(ICommand command)
+ void Execute(ICommand command) //This fires up when we do something locally
  {
   this.client.Send(command);
  }
  
- void UpdateGameState(ICommand command)
+ void UpdateGameState(ICommand command) //This fires up when we get command from the server
  {
   command.Execute(this.gameState)
  }
