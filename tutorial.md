@@ -134,17 +134,50 @@ public interface ICommand {
 }
 
 [Serializable]
-public class ConcreteCommand : ICommand {
+public class SomeCommand : ICommand {
  [Serializable]
  int data;
  
  void Execute(GameState gameState){
-  gameState.someData(data);
+  gameState.someObject.someMethod(data);
  }
 }
 
 ```
-What is crucial in here: **don't make your Executions too complex.**
+What is crucial in here: **don't make your Executions too complex.** All logic should be inside GameState objects. AttackCommand should specify: attacker, target and execute method like ```Attack(Entity target)```. We just need commands to do some atomic operations that will be sent using network.
+
+Some upgrade I've come up with: ```bool Execute(GameState gameState)``` can be used for extra control. Sometimes we shouldn't resend some command that for example doesn't do anything because we are accessing something that is outside our world map.
+
+We can't forget about making a Executor class, that will execute our commands.
+Shortly:
+```
+public interface IExecutor {
+ void Execute(ICommand command);
+}
+
+public class ServerExecutor : IExecutor {
+ 
+ void Execute(ICommand command)
+ {
+  command.Execute(this.gameState);
+  this.server.SendToAll(command);
+ }
+}
+
+public class ServerExecutor : IExecutor {
+ 
+ void Execute(ICommand command)
+ {
+  this.client.Send(command);
+ }
+ 
+ void UpdateGameState(ICommand command)
+ {
+  command.Execute(this.gameState)
+ }
+}
+
+```
 
 
 ### 2.3 Client and Server
