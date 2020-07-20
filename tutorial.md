@@ -1,9 +1,9 @@
 # Unity Multiplayer and Architecture
-## Part One: Introduction
+## 1. Introduction
 
 With growing intrest in multiplayer games, many of you, game developers may stumble upon a problem: *how do I make a multiplayer that works?* Unity no longer supports UNET and it is a small challenge to make your own networking. However your solution will be the best, because you, as developer, know what your game needs. Also it is crucial that if you want to have a multiplayer game, you gotta think about it from the start. Singleplayer is just one player multiplayer, but multiplayer can't be a singleplayer for many players. Of course if we are talking about playing via the Internet.
 
-## But... How multiplayer works?
+## 1.1 But... How multiplayer works?
 Simply speaking, we have to know how computers communicate. As your PC is connected to the Internet it sends data in UDP datagrams or TCP packets that are routed to other computers. They contain a data such as: IP Address, port, payload (**data we are sending**) and other TCP or UDP additional fields. I am not going to explain everything about TCP and UDP here, but these things you have to know:
 
 #### TCP
@@ -26,7 +26,7 @@ So our game is just a set of some operations on data: movement is just a change 
 
 When I cast a spell that heals my avatar, other players will see that my HP is no loger 10/100, but 100/100.
 
-### Solutions
+### 1.2 Solutions
 
 If we take a look at my example with healing we can see that some solutions are better than others. Lets consider two ways we can do it:
 
@@ -44,6 +44,8 @@ This solution may cause a lot problems in very sticky situations causing our gam
 I heal my avatar, so I send it to the server. Server resends this order to me and my enemy. What if he tries to attack me and kill me? He also sends his order that he wants to attack me to the server. So our server got two messages and it will resend them in order they arrived so there is little chance that we both have different versions of game state.
 
 This makes our client "stupid" while the server has the authority over everything. We don't even have to run our calculations on data locally as server will do it for us and we can only focus on displaying data. This is how browser multiplayer games are so lightweight. However I think we as a game developer want to make our players host a game for their friends or just play singleplayer.
+
+There is a lot of variations of this "server is authoritative" idea, but I think you get what it is all about.
 
 ### Summary?
 
@@ -66,6 +68,7 @@ In the simplest form of the Command Design pattern (or at least variation we are
 
 So: 
 ```
+[Serializable]
 public class ItemUseCommand : ICommand{
  Item item;
  
@@ -98,7 +101,58 @@ To make it more clear, I want to give you a simple example how this will work in
 6) Our GameData has changed. Update our game: play a sound, change UI or do something else.
 
 
-## Part Two: Oh no, so we gotta start programming it now?
+## 2. Implementation Idea
+
+This tutorial won't be focused on programming, since I assume you know how to write code. If you find yourself unable to make a good architecture or just want to see what is the practical side of all I've spoken about, here it is:
+
+### 2.1 Game State - all the game data.
+
+Just because it is Unity, that doesn't mean you should mix everything together and use MonoBehaviours. That is the wisdom I want to tell you first. Of course it depends on game, but in many cases you shouldn't use MonoBehaviours for everything. I want you to see Unity just as a screen to display our game and please forget about typical Unity tutorials. 
+
+We are gonna make a class that stores **all the game related data** such us: items, monsers, map etc. This class should be serializable, because player should have a possibilty to late join current session. Not only that. Saving and loading game would be super easy too. So here is an example:
+
+```
+[Serializable]
+public class GameState {
+ public int score;
+ public List<Monser> monsters;
+ 
+ public PlayerList playerList;
+ etc...
+}
+```
+
+You should also make a static class that serializes/deserializes GameState. From file or sent data via network. 
+
+### 2.2 Commands, Commands and... Executors
+Earlier I've gave you the way they works, so this should be fairly simple:
+
+```
+[Serializable]
+public interface ICommand {
+ void Execute(GameState gameState);
+}
+
+[Serializable]
+public class ConcreteCommand : ICommand {
+ [Serializable]
+ int data;
+ 
+ void Execute(GameState gameState){
+  gameState.someData(data);
+ }
+}
+
+```
+What is crucial in here: **don't make your Executions too complex.**
+
+
+### 2.3 Client and Server
+
+### 2.4 It's all coming together
+
+### 2.5 Observers?
+
 
 
 
