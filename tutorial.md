@@ -87,7 +87,7 @@ public void Execute(GameData gameData)
 
 Concrete Executor would just take an Command that inheirits from ICommand and will execute them. However there are many ways we can execute it. If this is client, we have to send this ICommand to the server so the server can execute it first and since our method is encapsulated into an object it can be easily send via network! If we are testing something we can make our concrete IExecutor to save every Command so we can track our game and all changes in GameData to find bugs. What about replay? We just save all Commands in an Array and their timestamp and reexecute them from the start.
 
-Command Design Pattern is a huge and powerful tool in structuring your code especially in networking as Commands can be serialized and send to other computers. You can modify your command with ```undo()``` that reverts changes to the GameData. Do you know now how CTRL+Z works? :)
+Command Design Pattern is a huge and powerful tool in structuring your code especially in networking as Commands can be serialized and send to other computers. You can modify your command with ```undo()``` that reverts changes to the GameData. Do you now know how CTRL+Z is implemented in programs like Photoshop? :)
 
 ### Bigger picture
 
