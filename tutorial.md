@@ -78,9 +78,9 @@ public class ItemUseCommand : ICommand{
  }
 
 public void Execute(GameData gameData)
-{
- item.use(gameData); 
-}
+ {
+  item.use(gameData); 
+ }
 
 }
 ```
@@ -113,7 +113,8 @@ We are gonna make a class that stores **all the game related data** such us: ite
 
 ```
 [Serializable]
-public class GameState {
+public class GameState 
+{
  public int score;
  public List<Monser> monsters;
  
@@ -129,16 +130,19 @@ Earlier I've gave you the way they works, so this should be fairly simple:
 
 ```
 [Serializable]
-public interface ICommand {
+public interface ICommand 
+{
  void Execute(GameState gameState);
 }
 
 [Serializable]
-public class SomeCommand : ICommand {
+public class SomeCommand : ICommand 
+{
  [Serializable]
  int data;
  
- void Execute(GameState gameState){
+ void Execute(GameState gameState)
+ {
   gameState.someObject.someMethod(data);
  }
 }
@@ -151,12 +155,13 @@ Some upgrade I've come up with: ```bool Execute(GameState gameState)``` can be u
 We can't forget about making a Executor class, that will execute our commands.
 Shortly:
 ```
-public interface IExecutor {
+public interface IExecutor 
+{
  void Execute(ICommand command);
 }
 
-public class ServerExecutor : IExecutor {
- 
+public class ServerExecutor : IExecutor 
+{
  void Execute(ICommand command)
  {
   command.Execute(this.gameState);
