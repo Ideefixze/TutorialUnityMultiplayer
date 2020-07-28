@@ -1,4 +1,11 @@
-# MultiplayerArchitectureUnity2
-Multiplayer Unity project.
+# Custom multiplayer for Unity
+Quick and easy sketch for making your own networking in Unity. This tutorial gives only an idea about using Command Design Pattern and basic networking to make effective basis for your custom multiplayer that can be changed to your own needs.
 
-[Tutorial](tutorial.md)
+Required knowledge:
+- basics of TCP/UDP socket programming
+- serialization
+- Unity
+
+[Read tutorial here!](tutorial.md)
+
+And if you need... clone this repository and check how this works!
