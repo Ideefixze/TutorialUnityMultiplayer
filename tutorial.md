@@ -192,12 +192,45 @@ public class ClientExecutor : IExecutor {
 
 ```
 
+### 2.3 What command is this? - clever workaround.
 
-### 2.3 Client and Server
+As we send our data in serialized form, we don't know what type of object we just serialized. This is tricky, because are sending Commands of different types and when we unserialize them, we have no idea what their type is, so how we can fix this? Here is my solution that I find very clever.
 
-### 2.4 It's all coming together
+Just make a class:
+```
+[Serializable]
+public class SerializableClass
+{
+    [SerializeField]
+    private string serializedClassName;
 
-### 2.5 Observers?
+    public SerializableClass()
+    {
+        serializedClassName = this.GetType().ToString();
+    }
+}
+```
+And make sure that our particular ICommands also inheirit from SerializableClass.
+Then in our Command deserializer add something like this:
+```
+struct CommandType
+{
+    public string serializedClassName;
+}
+
+public static ICommand JsonStringToCommand(string json)
+{
+    CommandType ctype = JsonUtility.FromJson<CommandType>(msg);
+    Type t = Type.GetType(ctype.serializedClassName);
+    ICommand c = (IGameCommand)JsonUtility.FromJson(json, t);
+    return c;
+}
+```
+This is based on a trick that we can deserialize object A into object B if object A has all the fields that B have, at least when we talk about serializable fields.
+Rule is: Serializer/Deserializer doesn't care about object, only cares about fields of that object.
+
+
+
 
 
 
