@@ -1,4 +1,4 @@
-# Unity Multiplayer and Architecture
+# Unity Multiplayer and Architecture using Command Pattern
 ## 1. Introduction
 
 With growing intrest in multiplayer games, many of you, game developers may stumble upon a problem: *how do I make a multiplayer that works?* Unity no longer supports UNET and it is a small challenge to make your own networking. However your solution will be the best, because you, as developer, know what your game needs. Also it is crucial that if you want to have a multiplayer game, you gotta think about it from the start. Singleplayer is just one player multiplayer, but multiplayer can't be a singleplayer for many players. Of course if we are talking about playing via the Internet.
@@ -16,22 +16,25 @@ UDP datagrams are send and expected to be received. However we are not sure that
 
 #### Idea of a Multiplayer: Simultaneous Simulations
 
+Useful article from practical point of view:
 https://www.gamasutra.com/view/feature/131503/1500_archers_on_a_288_network_.php
 
-Let's separate our game into two: 
+Base idea goes like this:
+Let's separate our game into two structures: 
 - **game data** (player positions, level and health of the monsters) 
 - **game application** (code that operates on some data)
 
-So our game is just a set of some operations on data: movement is just a change in position, attacking is reducing someone's health. A simulation of some sort that takes input from the player. What if we reexecuted all the operations on all multiplayer clients that start with the same **game data**? 
+So our game is just a set of some operations on data: movement is just a change in position, attacking is reducing someone's health. A simulation of some sort that takes input from the player. What if we reexecuted all the operations on all multiplayer clients that begin with the same starting **game data**?  
 
-When I cast a spell that heals my avatar, other players will see that my HP is no loger 10/100, but 100/100.
+In game example:
+When I cast a spell that heals my avatar, other players will see that my HP is no longer 10/100, but 100/100. We have to propagate those operation to other players. Of course, in client-server architectur we have to first communicate with the server. When and how we do that exactly? 
 
 ### 1.2 Solutions
 
 If we take a look at my example with healing we can see that some solutions are better than others. Lets consider two ways we can do it:
 
 #### A - local execution and sending
-*I will change data in my game and send information about it to the server. Server will send information to other players..*
+*I will change data in my game and send information about it to the server. Server will send information to other players...*
 
 I heal my avatar locally, I set my health from 10/100 to 100/100. I send information to the server: "I've healed my hero!" and it updates its game state and sends this message to other players. My enemy attacked and killed me before he got the message that I've healed myself. In his eyes I am dead. He sends info that he leathally attacked me. Server takes information: reduces my health from 100 to 70 and I got consistent game data with the server but not with other player.
 (Often the server **is** some third player that hosts our game) 
@@ -39,7 +42,7 @@ I heal my avatar locally, I set my health from 10/100 to 100/100. I send informa
 This solution may cause a lot problems in very sticky situations causing our game datas to differ, when they should be consistent among all players. Desychnronization is something we want to avoid at all cost, since as a player we would have to reload all game data and that would take a lot of time. Remember that human is an impatient creature.
  
 #### B - server is authoritative
-*I will send what I want to do with my game data and the server will resend all the operations again to me and other players*
+*I will send what I want to do with my game data and the server will resend all the operations again to me and other players...*
 
 I heal my avatar, so I send it to the server. Server resends this order to me and my enemy. What if he tries to attack me and kill me? He also sends his order that he wants to attack me to the server. So our server got two messages and it will resend them in order they arrived so there is little chance that we both have different versions of game state.
 
@@ -49,15 +52,15 @@ There is a lot of variations of this "server is authoritative" idea, but I think
 
 Any drawbacks? It is slower and gives some input lag. This is not a perfect solution if game takes place in realtime and there a lot of calculations which can be non-deterministic (floats). Consider doing client-side predictions. Any multiplayer solution you take you still have to handle situations where client data diverge from server data and even **authoritative server** can't make sure that everything would be consistent and would go smoothly. 
 
-### Summary?
+### 1.3 Summary?
 
 In this tutorial I'll try to make a sketch for you how to make multiplayer game architecture with authoritative server using TCP as our protocol. 
 
-## Command Design Pattern
+## 2. Command Design Pattern
 
 This tutorial used some words as: "commands". Am I some fan of strategy games to talk like that? Yes, but in this case I've already knew that you will get here. We will be using a Command Design Pattern to execute our changes in the game data. Shortly speaking it is very lovely way to structure your code, especially with multiplayer game. If you really understand it, you will never want to go back and write games in any other way, because it is a simple and beautiful design pattern..
 
-### What is Command Design Pattern?
+### 2.1 What is Command Design Pattern?
 
 Lets say we have interface of some Item: potion, scroll, bomb? You name it. And they all have something in common: they can be used. Potion heals you, scroll turns you into a cat, bomb makes an epic explosion. So we have our inventory of these items and evertime we click Z,X or C we use them and the game will just execute an interface method ``` Item.use() ```. That is a simple and good solution, but in Object Oriented Programming we can do more than that.
 
@@ -94,7 +97,7 @@ If we are testing something we can make our concrete IExecutor to save every Com
  
 Command Design Pattern is a huge and powerful tool in structuring your code especially in networking as Commands can be serialized and send to other computers. You can modify your command with ```undo()``` that reverts changes to the GameData. Do you now know how CTRL+Z is implemented in programs like Photoshop? :)
 
-### Bigger picture
+### 2.2 Bigger picture
 
 To make it more clear, I want to give you a simple example how this will work in a multiplayer game.
 
@@ -106,11 +109,11 @@ To make it more clear, I want to give you a simple example how this will work in
 6) Our GameData has changed. Update our game: play a sound, change UI or do something else.
 
 
-## 2. Implementation Idea
+## 3. Implementation Idea
 
 This tutorial won't be focused on programming, since I assume you know how to write code. If you find yourself unable to make a good architecture or just want to see what is the practical side of all I've spoken about, here it is:
 
-### 2.1 Game State - all the game data.
+### 3.1 Game State - all the game data.
 
 Just because it is Unity, that doesn't mean you should mix everything together and use MonoBehaviours and scenes. That is the wisdom I want to tell you first. Of course it depends on game, but in many cases you shouldn't use MonoBehaviours for everything. I want you to see Unity just as a screen to display our game.
 
@@ -133,7 +136,7 @@ public class GameState
 
 You should also make a static class that serializes/deserializes GameState. From file or from data sent via network. See: **JsonUtility** in Unity. 
 
-### 2.2 Commands, Commands and... Executors
+### 3.2 Commands, Commands and... Executors
 Earlier I've gave you the way they works, so this should be fairly simple:
 
 ```
@@ -192,9 +195,9 @@ public class ClientExecutor : IExecutor {
 
 ```
 
-### 2.3 What command is this? - clever workaround.
+### 3.3 What command is this? Clever workaround.
 
-As we send our data in serialized form, we don't know what type of object we just serialized. This is tricky, because are sending Commands of different types and when we unserialize them, we have no idea what their type is, so how we can fix this? Here is my solution that I find very clever.
+As we send our data in serialized form, we don't know what type of object we just want to have deserialized. *Is this Command A, or Command B? I don't know!* So how we can fix this? Here is my solution, that would cost us an additional field in every command we send. 
 
 Just make a class:
 ```
@@ -213,21 +216,16 @@ public class SerializableClass
 And make sure that our particular ICommands also inheirit from SerializableClass.
 Then in our Command deserializer add something like this:
 ```
-struct CommandType
+public static ICommand StringToCommand(string msg)
 {
-    public string serializedClassName;
-}
-
-public static ICommand JsonStringToCommand(string json)
-{
-    CommandType ctype = JsonUtility.FromJson<CommandType>(msg);
-    Type t = Type.GetType(ctype.serializedClassName);
-    ICommand c = (IGameCommand)JsonUtility.FromJson(json, t);
-    return c;
+    SerializableClass ctype = JsonUtility.FromJson<SerializableClass>(msg);
+    Type t = Type.GetType(ctype.GetClassName());
+    ICommand gc = (ICommand)JsonUtility.FromJson(msg, t);
+    return gc;
 }
 ```
-This is based on a trick that we can deserialize object A into object B if object A has all the fields that B have, at least when we talk about serializable fields.
-Rule is: Serializer/Deserializer doesn't care about object, only cares about fields of that object.
+This is based on a trick that we can deserialize serialized object A into object B if object A has all the fields that B have, at least when we talk about serializable fields.
+Rule is: *Serializer/Deserializer doesn't care about object, only cares about fields of that object.*
 
 
 
