@@ -5,6 +5,7 @@ Required knowledge:
 - TCP/UDP socket programming
 - serialization
 - Unity
+- basic GameDev skills
 
 [Read tutorial here!](tutorial.md)
 
