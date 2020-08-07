@@ -4,7 +4,7 @@
 With growing intrest in multiplayer games, many of you, game developers may stumble upon a problem: *how do I make a multiplayer that works?* Unity no longer supports UNET and it is a small challenge to make your own networking. However your solution will be the best, because you, as developer, know what your game needs. Also it is crucial that if you want to have a multiplayer game, you gotta think about it from the start. Singleplayer is just one player multiplayer, but multiplayer can't be a singleplayer for many players. Of course if we are talking about playing via the Internet.
 
 ### 1.1 But... How multiplayer works?
-Simply speaking, we have to know how computers communicate. As your PC is connected to the Internet it sends data in UDP datagrams or TCP packets that are routed to other computers. They contain a data such as: IP Address, port, payload (**data we are sending**) and other TCP or UDP additional fields. I am not going to explain everything about TCP and UDP here, but these things you have to know:
+Simply speaking, we have to know how computers communicate. As your PC is connected to the Internet it sends data in UDP datagrams or TCP packets that are routed to other computers. They contain a data such as: IP Address, port, payload (**data we are sending**) and other TCP or UDP additional fields. These are the things you have to know:
 
 #### TCP
 
@@ -173,6 +173,9 @@ public interface IExecutor
 
 public class ServerExecutor : IExecutor 
 {
+.
+.
+.
  void Execute(ICommand command)
  {
   command.Execute(this.gameState);
@@ -181,6 +184,9 @@ public class ServerExecutor : IExecutor
 }
 
 public class ClientExecutor : IExecutor {
+ .
+ .
+ .
  
  void Execute(ICommand command) //This fires up when we do something locally
  {
@@ -194,6 +200,7 @@ public class ClientExecutor : IExecutor {
 }
 
 ```
+Remember to use **Observer Pattern** (C# Events) to notify your Views about changing GameState.
 
 ### 3.3 What command is this? Clever workaround.
 
@@ -227,10 +234,43 @@ public static ICommand StringToCommand(string msg)
 This is based on a trick that we can deserialize serialized object A into object B if object A has all the fields that B have, at least when we talk about serializable fields.
 Rule is: *Serializer/Deserializer doesn't care about object, only cares about fields of that object.*
 
+## 4. Client-server
 
+If you structured your code just like above now implementing multiplayer should be an easy task. You just need a simple TCP socket server and client class (see code in my repository to see how you can do this). Then add an internal protocol for serialized packets. Why we need that?
 
+See:
+```
+Client:
+		JumpCommand jc = new JumpCommand(10f); 
+		=>
+		Execute(jc)
+		=>
+		Send(jc)
 
+		DrinkCommand dc = new DrinkCommand(DRINK.Beer); 
+		=>
+		Execute(dc)
+		=>
+		Send(dc)
 
+Server:
+		Two packets can bre received as two separate packets: "{serialized(jc)}" and "{serialized(dc)}"
+			or
+		Two packets can be received as one packet: "{serialized(jc)}{serialized(dc)}" 
+```
+
+Sometimes a serialized Command can be bigger than our NetworkStream, so we gotta handle those problems.
+
+### 4.1 Solutions?
+#### Control char
+It is pretty simple. We would just put a char like **$** or **@** at the end of each "{serialized(command)}" that we send to the server. We remember all data received until this control char goes into stream.
+
+#### Pre-header
+At the begining of each "{serialized(command)}" that we send to the server we would add a header that would contain all information about this payload. Header should be minimal in size. One integer that tells us about the length should be enough.
+
+## 5. The end and additional resources
+
+I am hopeful that this tutorial gave you an insight how one would go about implementing custom networking for Unity engine. In this repository there is an Unity project with an implementation that works fairly good (still needs some improvements). It is a great basis for starting off and making your own multiplayer game. I also leave here resources that can help you. Have a good deving!
 
 
 
