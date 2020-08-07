@@ -263,7 +263,7 @@ Sometimes a serialized Command can be bigger than our NetworkStream, so we gotta
 
 ### 4.1 Solutions?
 #### Control char
-It is pretty simple. We would just put a char like **$** or **@** at the end of each "{serialized(command)}" that we send to the server. We remember all data received until this control char goes into stream.
+It is pretty simple. We would just put a char like **$** or **@** at the end of each "{serialized(command)}" that we send to the server. Basically: you should remember all data received until this control char goes into stream.
 
 #### Pre-header
 At the begining of each "{serialized(command)}" that we send to the server we would add a header that would contain all information about this payload. Header should be minimal in size. One integer that tells us about the length should be enough.
@@ -272,9 +272,4 @@ At the begining of each "{serialized(command)}" that we send to the server we wo
 
 I am hopeful that this tutorial gave you an insight how one would go about implementing custom networking for Unity engine. In this repository there is an Unity project with an implementation that works fairly good (still needs some improvements). It is a great basis for starting off and making your own multiplayer game. I also leave here resources that can help you. Have a good deving!
 
-
-
-
-
- 
 
