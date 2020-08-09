@@ -258,9 +258,9 @@ It is pretty simple. We would just put a char like **$** or **@** at the end of 
 #### Pre-header
 At the begining of each "{serialized(command)}" that we send to the server we would add a header that would contain all information about this payload. Header should be minimal in size. One integer that tells us about the length should be enough. By this header we would know how long is our payload and where it does end.
 
-## 5. The end and additional resources
+## 5. The End and additional resources
 
-I am hopeful that this tutorial gave you an insight how one would go about implementing custom networking for Unity engine. In this repository there is mine _Unity project with an implementation_ that works fairly good (**still needs some improvements!**). It is a great basis for starting off and making your own multiplayer game. I also leave here resources that can help you. Have a good deving!
+I am hopeful that this tutorial gave you an insight how one would go about implementing custom networking for Unity engine. In this repository there is mine ***Unity project with an implementation*** that works fairly good (**still needs some improvements!**). It is a great basis for starting off and making your own multiplayer game. I also leave here resources that can help you. Have a good deving!
 
 ### 5.1 Links
 
