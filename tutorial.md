@@ -265,16 +265,16 @@ I am hopeful that this tutorial gave you an insight how one would go about imple
 ### 5.1 Links
 
 Command Pattern:
-https://refactoring.guru/design-patterns/command
-https://medium.com/gamedev-architecture/decoupling-game-code-via-command-pattern-debugging-it-with-time-machine-2b177e61556c
+- https://refactoring.guru/design-patterns/command
+- https://medium.com/gamedev-architecture/decoupling-game-code-via-command-pattern-debugging-it-with-time-machine-2b177e61556c
 
 Networking:
-https://www.gabrielgambetta.com/client-server-game-architecture.html
-https://www.gamasutra.com/view/feature/131503/1500_archers_on_a_288_network_.php
+- https://www.gabrielgambetta.com/client-server-game-architecture.html
+- https://www.gamasutra.com/view/feature/131503/1500_archers_on_a_288_network_.php
 
 Client/Server implementation:
-https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-client-socket-example
-https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-server-socket-example
+- https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-client-socket-example
+- https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-server-socket-example
 
 
 
