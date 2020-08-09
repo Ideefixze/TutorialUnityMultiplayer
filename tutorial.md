@@ -1,7 +1,7 @@
 # Unity Multiplayer and Architecture using Command Pattern
 ## 1. Introduction
 
-With growing intrest in multiplayer games, many of you, game developers may stumble upon a problem: *how do I make a multiplayer that works?* Unity no longer supports UNET and it is a small challenge to make your own networking. However your solution will be the best, because you, as developer, know what your game needs. Also it is crucial that if you want to have a multiplayer game, you gotta think about it from the start. Singleplayer is just one player multiplayer, but multiplayer can't be a singleplayer for many players. Of course if we are talking about playing via the Internet.
+With growing intrest in multiplayer games, many of you, game developers may stumble upon a problem: *how do I make a multiplayer that works?* Unity no longer supports UNET and it is a small challenge to make your own networking. However your solution will be the best, because you, as developer, know what your game needs. Also it is crucial that if you want to have a multiplayer game, you gotta think about it from the start. Singleplayer is just one player multiplayer, but multiplayer can't be a singleplayer for many players. Of course if we are talking about playing via the Internet. This tutorial are my insights and tips of how one would go implementing their own multiplayer in Unity.
 
 ### 1.1 But... How multiplayer works?
 Simply speaking, we have to know how computers communicate. As your PC is connected to the Internet it sends data in UDP datagrams or TCP packets that are routed to other computers. They contain a data such as: IP Address, port, payload (**data we are sending**) and other TCP or UDP additional fields. These are the things you have to know:
@@ -23,9 +23,6 @@ Let's separate our game into two structures:
 
 So our game is just a set of some operations on data: movement is just a change in position, attacking is reducing someone's health. A simulation of some sort that takes input from the player. What if we reexecuted all the operations on all multiplayer clients that begin with the same starting **game data**?  
 
-In game example:
-When I cast a spell that heals my avatar, other players will see that my HP is no longer 10/100, but 100/100. We have to propagate those operation to other players. Of course, in client-server architecture we have to first communicate with the server. When and how we do that exactly? 
-
 ### 1.2 Solutions and *Server Authority*
 
 If we take a look at the example with healing we can see that some solutions are better than others. Lets consider two ways we can do it:
@@ -33,7 +30,7 @@ If we take a look at the example with healing we can see that some solutions are
 #### A - local execution and sending
 *I will change data in my game and send information about it to the server. Server will send information to other players...*
 
-I heal my avatar locally, I set my health from 10/100 to 100/100. I send information to the server: "I've healed my hero!" and it updates its game state and sends this message to other players. My enemy attacked and killed me before he got the message that I've healed myself. In his eyes I am dead. He sends info that he leathally attacked me. Server takes information: reduces my health from 100 to 70 and I got consistent game data with the server but not with other player.
+>I heal my avatar locally, I set my health from 10/100 to 100/100. I send information to the server: "I've healed my hero!" and it updates its game state and sends this message to other players. My enemy attacked and killed me before he got the message that I've healed myself. In his eyes I am dead. He sends info that he leathally attacked me. Server takes information: reduces my health from 100 to 70 and I got consistent game data with the server but not with other player.
 (Sometimes the server **is** some third player that hosts our game) 
 
 This solution may cause a lot problems in very sticky situations causing our game datas to differ, when they should be consistent among all players. Desychnronization is something we want to avoid at all cost, since as a player we would have to reload all game data and that would take a lot of time. Remember that human is an impatient creature.
@@ -41,11 +38,9 @@ This solution may cause a lot problems in very sticky situations causing our gam
 #### B - server is authoritative
 *I will send what I want to do with my game data and the server will resend all the operations again to me and other players...*
 
-I heal my avatar, so I send it to the server. Server resends this order to me and my enemy. What if he tries to attack me and kill me? He also sends his order that he wants to attack me to the server. So our server got two messages and it will resend them in order they arrived so there is little chance that we both have different versions of game state. We will both see what server saw.
+>I heal my avatar, so I send it to the server. Server resends this order to me and my enemy. What if he tries to attack me and kill me? He also sends his order that he wants to attack me to the server. So our server got two messages and it will resend them in order they arrived so there is little chance that we both have different versions of game state. We will both see what server saw.
 
 This makes our client "stupid" in accepting what I want to do while the server has the authority over (pretty much) everything. We don't even have to run our calculations on data locally as server will do it for us and we can only focus on displaying data. This is how browser multiplayer games are so lightweight.
-
-There is a lot of variations of this "server is authoritative" idea, but I think you get what it is all about.
 
 Any drawbacks? It is slower and gives some input lag. This is not a perfect solution if game takes place in realtime and there are a lots of calculations which can be non-deterministic (floats). Consider doing **client-side predictions**. Any multiplayer solution you take you still have to handle situations where client data diverge from server data and even **authoritative server** can't make sure that everything would be consistent and would go smoothly.
 
@@ -261,14 +256,26 @@ Sometimes a serialized Command can be bigger than our NetworkStream, so we gotta
 It is pretty simple. We would just put a char like **$** or **@** at the end of each "{serialized(command)}" that we send to the server. Basically: you should remember all data received until this control char goes into stream.
 
 #### Pre-header
-At the begining of each "{serialized(command)}" that we send to the server we would add a header that would contain all information about this payload. Header should be minimal in size. One integer that tells us about the length should be enough.
+At the begining of each "{serialized(command)}" that we send to the server we would add a header that would contain all information about this payload. Header should be minimal in size. One integer that tells us about the length should be enough. By this header we would know how long is our payload and where it does end.
 
 ## 5. The end and additional resources
 
-I am hopeful that this tutorial gave you an insight how one would go about implementing custom networking for Unity engine. In this repository there is an Unity project with an implementation that works fairly good (still needs some improvements). It is a great basis for starting off and making your own multiplayer game. I also leave here resources that can help you. Have a good deving!
+I am hopeful that this tutorial gave you an insight how one would go about implementing custom networking for Unity engine. In this repository there is mine _Unity project with an implementation_ that works fairly good (**still needs some improvements!**). It is a great basis for starting off and making your own multiplayer game. I also leave here resources that can help you. Have a good deving!
 
 ### 5.1 Links
 
+Command Pattern:
+https://refactoring.guru/design-patterns/command
+https://medium.com/gamedev-architecture/decoupling-game-code-via-command-pattern-debugging-it-with-time-machine-2b177e61556c
+
+Networking:
+https://www.gabrielgambetta.com/client-server-game-architecture.html
 https://www.gamasutra.com/view/feature/131503/1500_archers_on_a_288_network_.php
+
+Client/Server implementation:
+https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-client-socket-example
+https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-server-socket-example
+
+
 
 
