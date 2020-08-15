@@ -7,6 +7,7 @@ Required knowledge:
 - Unity
 - basic GameDev skills
 
-[Read tutorial here!](tutorial.md)
+[01. Basics](01basics.md)
+[02. Command Pattern](02commandPattern.md)
 
 And if you need... clone this repository and check how this works!
