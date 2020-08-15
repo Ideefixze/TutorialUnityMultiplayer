@@ -17,3 +17,8 @@ By using this division of Game Data and Game Logic, we come into a conclusion th
 
 ## Server Authority and Peer-To-Peer
 There are two architectures that are crucial in planning a multiplayer game. Should those operations done by the Player A be sent to one chosen Player S and then resent to all the other players? Or maybe Player A should just sent it to all the other players? Both solutions have their advantages and disadvantages. Competetive games can't be peer-to-peer as a lack of an authority would be a serious issue. Authoritative server also returns back all the input we have made as a confirmation, so our Game Logic can operate on Game Data. This generates some latency.
+
+## What's next?
+In the next tutorial we will see how effectively implement the Game Logic using a Command Pattern. This is a very useful design pattern, not only in game development, but in programming in general. Tutorial won't cover all the code you need. You can see it in this repository, what I want to do is to explain what is the idea behind it. 
+
+[Next ->](02commandPattern.md)
