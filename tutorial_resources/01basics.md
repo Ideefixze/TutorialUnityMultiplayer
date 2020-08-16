@@ -16,7 +16,9 @@ Very important tip on making own game in general, not only a multiplayer one, is
 By using this division of Game Data and Game Logic, we come into a conclusion that a multiplayer game should aspire to equalize all Game Datas of connected players. Any Game Logic operations done by a Player A should be noticed by a Player B and vice versa.  
 
 ## Server Authority and Peer-To-Peer
-There are two architectures that are crucial in planning a multiplayer game. Should those operations done by the Player A be sent to one chosen Player S and then resent to all the other players? Or maybe Player A should just sent it to all the other players? Both solutions have their advantages and disadvantages. Competetive games can't be peer-to-peer as a lack of an authority would be a serious issue. Authoritative server also returns back all the input we have made as a confirmation, so our Game Logic can operate on Game Data. This generates some latency.
+![Server vs. P2P](networks.png)
+
+There are two architectures that are crucial in planning a multiplayer game. Developer must consider this idea: *Should those operations done by the Player A be sent to one chosen Player S and then resent to all the other players? Or maybe Player A should just sent it to all the other players?* Both solutions have their advantages and disadvantages. Competetive games can't be peer-to-peer as a lack of an authority would be a serious issue: cheating. Authoritative server also returns back all the input we have made as a confirmation, so our Game Logic can operate on Game Data. This generates some latency. However it makes a control over Game Data much easier, because we always have one trustworthy source of current game state.
 
 ## What's next?
 In the next tutorial we will see how effectively implement the Game Logic using a Command Pattern. This is a very useful design pattern, not only in game development, but in programming in general. Tutorial won't cover all the code you need. You can see it in this repository, what I want to do is to explain what is the idea behind it. 
