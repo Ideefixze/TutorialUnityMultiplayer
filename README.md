@@ -9,6 +9,4 @@
 
 3. [Client and Server](tutorial_resources/03clientserver.md)
 
-4. [The End](tutorial_resources/04theEnd.md)
-
 And if you need... clone this repository and check how this works!
