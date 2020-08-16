@@ -7,7 +7,7 @@
 
 2. [Command Pattern](tutorial_resources/02commandPattern.md)
 
-3. [Handling Commands via Network](tutorial_resources/03commandsViaNet.md)
+3. [Client and Server](tutorial_resources/03clientserver.md)
 
 4. [The End](tutorial_resources/04theEnd.md)
 
