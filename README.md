@@ -3,12 +3,12 @@
   
 ## Tutorial
 
-1. [Basics](01basics.md)
+1. [Basics](tutorial_resources/01basics.md)
 
-2. [Command Pattern](02commandPattern.md)
+2. [Command Pattern](tutorial_resources/02commandPattern.md)
 
-3. [Handling Commands via Network](03commandsViaNet.md)
+3. [Handling Commands via Network](tutorial_resources/03commandsViaNet.md)
 
-4. [The End](04theEnd.md)
+4. [The End](tutorial_resources/04theEnd.md)
 
 And if you need... clone this repository and check how this works!
