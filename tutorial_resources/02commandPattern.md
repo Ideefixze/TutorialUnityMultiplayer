@@ -103,7 +103,42 @@ To make it more clear, a simple example how this will work in a multiplayer game
 JSON serialization makes a string from an object's fields. This string now can be used to create a new object of this type that will have exactly same field values. 
 Simple example:
 ```
-string json = JsonUtility.ToJson(myObject);
-myObjectFromJson = JsonUtility.FromJson<myType>(myObject);
+ string json = JsonUtility.ToJson(myCommandA);
+ myCommandB = JsonUtility.FromJson<myCommandType>(myCommandA);
+ //myCommandA and myCommandB have all fields equal
 ```
+This can be used in our multiplayer as all operations(**commands**) can be turned into string that will be sent via network.
 
+## Deserializing Commands
+The problem is in deserializing those operations. We don't know their type as serializing doesn't serialize field: "name of the class" and we have to know what type of command we just got. This is my solution:
+```
+[Serializable]
+public class SerializableClass
+{
+    [SerializeField]
+    private string serializedClassName;
+
+    public SerializableClass()
+    {
+        serializedClassName = this.GetType().ToString();
+    }
+}
+```
+And make sure that our particular ICommands also inheirit from SerializableClass in some way.
+Then in our Command deserializer add something like this:
+```
+public static ICommand StringToCommand(string msg)
+{
+    SerializableClass ctype = JsonUtility.FromJson<SerializableClass>(msg);
+    Type t = Type.GetType(ctype.GetClassName());
+    ICommand gc = (ICommand)JsonUtility.FromJson(msg, t);
+    return gc;
+}
+```
+This would return a command whose type and fields' values are equal to the command sent.
+
+## What's next?
+
+In next tutorial we will see how one would go about implementing their own Server and Client class. This won't be a full code of doing it... but we will consider what those classes should do in our networking that uses Command Pattern. Especially if we want to make them asynchronous.
+
+[Next ->](03commandsViaNet.md)
