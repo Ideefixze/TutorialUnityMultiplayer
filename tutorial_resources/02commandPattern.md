@@ -141,4 +141,4 @@ This would return a command whose type and fields' values are equal to the comma
 
 In next tutorial we will see how one would go about implementing their own Server and Client class. This won't be a full code of doing it... but we will consider what those classes should do in our networking that uses Command Pattern. Especially if we want to make them asynchronous.
 
-[Next ->](03commandsViaNet.md)
+[Next ->](03clientserver.md)
