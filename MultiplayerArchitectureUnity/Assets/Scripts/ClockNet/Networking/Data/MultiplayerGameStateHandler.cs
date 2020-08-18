@@ -11,6 +11,9 @@ namespace ClockNet.Networking.Data
 public class MultiplayerGameStateHandler : IDataHandler, IDataDebugger
     {
         private string serializedGameState="";
+        //If during loading a serialized GameState we get any command, we should execute them on the start.
+        //We could also stop the server until player is loaded.
+        private string overheardData = ""; 
         public GameState.GameState gameState;
 
         public MultiplayerGameStateHandler()
@@ -21,9 +24,18 @@ public class MultiplayerGameStateHandler : IDataHandler, IDataDebugger
         {
             string datastr = System.Text.Encoding.ASCII.GetString(data).Trim('\0');
             serializedGameState += datastr;
-            if(serializedGameState.EndsWith(MultiplayerDataSettings.endChar.ToString()))
+            if (gameState == null)
             {
-                gameState = GameStateLoader.Deserialize(serializedGameState.Replace("$",""));
+                if (serializedGameState.EndsWith(MultiplayerDataSettings.endChar.ToString()))
+                {
+
+                    gameState = GameStateLoader.Deserialize(serializedGameState.Replace("$", ""));
+
+                }
+            }
+            else
+            {
+                overheardData += datastr;
             }
         }
 
@@ -37,6 +49,11 @@ public class MultiplayerGameStateHandler : IDataHandler, IDataDebugger
             {
                 Debug.Log($"{s}  — {metainfo}");
             }
+        }
+
+        public string GetOverheardData()
+        {
+            return overheardData;
         }
     }
 }

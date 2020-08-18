@@ -139,8 +139,6 @@ namespace ClockNet.GameState.GameStateData.PlayerList
 
         public void SwapPlaces(int ida, int idb)
         {
-            Debug.Log(ida);
-            Debug.Log(idb);
             if (ida == idb) return;
             players[ida - 1].ID = idb;
             players[idb - 1].ID = ida;

@@ -13,8 +13,9 @@ public class MultiplayerDataHandler: IDataHandler, IDataDebugger
         private string currentBuffer = "";
         protected Action<IGameCommand> onGameData;
 
-        public MultiplayerDataHandler(Action<IGameCommand> onGameData)
+        public MultiplayerDataHandler(Action<IGameCommand> onGameData, string startBuffer="")
         {
+            currentBuffer = startBuffer;
             this.onGameData += onGameData;
         }
         public void HandleData(byte[] data) 
@@ -47,6 +48,11 @@ public class MultiplayerDataHandler: IDataHandler, IDataDebugger
             {
                 Debug.Log($"{s}  — {metainfo}");
             }
+        }
+
+        public string GetOverheardData()
+        {
+            return currentBuffer;
         }
     }
 }

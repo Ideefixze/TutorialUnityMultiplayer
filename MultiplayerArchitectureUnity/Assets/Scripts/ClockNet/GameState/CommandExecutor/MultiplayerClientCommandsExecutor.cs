@@ -32,7 +32,7 @@ namespace ClockNet.GameState.CommandExecutor
         {
             this.gameState = gameState;
             this.client = client;
-            MultiplayerDataHandler handler = new MultiplayerDataHandler(UpdateState);
+            MultiplayerDataHandler handler = new MultiplayerDataHandler(UpdateState, client.dataHandler.GetOverheardData());
             this.client.InitializeDataEndPoint(handler, handler);
         }
         public void Execute(IGameCommand cmd)

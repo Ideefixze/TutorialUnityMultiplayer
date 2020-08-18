@@ -21,12 +21,14 @@ namespace ClockNet.GameState
         [SerializeField]
         private NetworkOperator networkOperator;
 
+        private Coroutine gameSimulationCoroutine;
+
         /// <summary>
         /// Creates one-player server for a singleplayer.
         /// </summary>
         public void InitSingleplayer()
         {
-            InitCommon();
+            gameState = new GameState();
             networkOperator.maxPlayers = 0;
             Server s = networkOperator.RunServer();
             gameExecutor = new MultiplayerServerCommandsExecutor(gameState, s);
@@ -43,7 +45,7 @@ namespace ClockNet.GameState
             InitCommon();
             Client c = networkOperator.JoinGame(ref gameState);
             gameExecutor = new MultiplayerClientCommandsExecutor(gameState, c);
-            gameExecutor.Execute(new JoinGameCommand(false, PlayerType.HUMAN, "Clockworker"));
+            gameExecutor.Execute(new JoinGameCommand(false, PlayerType.HUMAN, "GuestPlayer"));
             Debug.Log("Inited multiplayer client");
         }
 
@@ -57,7 +59,6 @@ namespace ClockNet.GameState
             gameExecutor = new MultiplayerServerCommandsExecutor(gameState, s);
             gameExecutor.Execute(new JoinGameCommand(true, PlayerType.HUMAN, "ServerMaster"));
             Debug.Log("Inited multiplayer server");
-            //StartSimulation();
         }
 
         /// <summary>
@@ -66,10 +67,21 @@ namespace ClockNet.GameState
         /// </summary>
         public void StartSimulation()
         {
+            if(gameSimulationCoroutine!=null) return;
+            
             DefaultGameSimulation simulation = new DefaultGameSimulation(gameExecutor, gameState);
-            DefaultGameTimer timer = new DefaultGameTimer(1f);
-            StartCoroutine(timer.WorldSimulation(simulation));
-            Debug.Log("Started game simulation");
+            DefaultGameTimer timer = new DefaultGameTimer(0.05f);
+            gameSimulationCoroutine = StartCoroutine(timer.WorldSimulation(simulation));
+            Debug.Log("Game Simulation: Start");
+        }
+
+        public void StopSimulation()
+        {
+            if (gameSimulationCoroutine != null)
+            {
+                StopCoroutine(gameSimulationCoroutine);
+                gameSimulationCoroutine = null;
+            }
         }
 
         /// <summary>

@@ -21,11 +21,7 @@ namespace ClockNet.GameState.GameStateManagement.Simulation
         }
         public void WorldTick()
         {
-            float t1 = Time.realtimeSinceStartup;
             executor.Execute(new AddPointsCommand(1));
-            float t2 = Time.realtimeSinceStartup;
-
-            Debug.Log($"World tick completed in: {(t2 - t1)}");
         }
     }
 }

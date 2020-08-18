@@ -34,7 +34,7 @@ namespace ClockNet.GameClient.Views
                 playerInfo.text += "ID: " + pd.ID.ToString() +" "+pd.nickname+ " S_ID:" + pd.networkID + " SLOT: " + (pd.slotTaken ? "TAKEN " : "EMPTY ") + "LOAD: "+(pd.loadState.ToString("g")) +" TYPE: " + (pd.type.ToString("g"))+"\n";
             }
 
-            playerInfo.text += "\nMY ID: " + gameState.playerList.GetClientData().ID +"  " +gameState.playerList.GetClientData().nickname;
+            playerInfo.text += "\nMY ID: " + gameState.playerList.GetClientData().ID +"  " +gameState.playerList.GetClientData().nickname+"\n\nPress 'S' to swap with next slot.";
 
             this.gameState = gameState;
         }

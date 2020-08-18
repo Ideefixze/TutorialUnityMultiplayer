@@ -9,8 +9,6 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
-    - UnityEditor.Tilemaps.GridPaletteBrushes
-    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -60,39 +58,39 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 15428}
+      Script: {instanceID: 11766}
     - Class: 114
-      Script: {instanceID: 15742}
+      Script: {instanceID: 12084}
     - Class: 114
-      Script: {instanceID: 15798}
+      Script: {instanceID: 12140}
     - Class: 114
-      Script: {instanceID: 16506}
+      Script: {instanceID: 12862}
     - Class: 114
-      Script: {instanceID: 16564}
+      Script: {instanceID: 12922}
     - Class: 114
-      Script: {instanceID: 16988}
+      Script: {instanceID: 13352}
     - Class: 114
-      Script: {instanceID: 17188}
+      Script: {instanceID: 13552}
     - Class: 114
-      Script: {instanceID: 17290}
+      Script: {instanceID: 13654}
     - Class: 114
-      Script: {instanceID: 17656}
+      Script: {instanceID: 14028}
     - Class: 114
-      Script: {instanceID: 17674}
+      Script: {instanceID: 14048}
     - Class: 114
-      Script: {instanceID: 17998}
+      Script: {instanceID: 14372}
     - Class: 114
-      Script: {instanceID: 18102}
+      Script: {instanceID: 14478}
     - Class: 114
-      Script: {instanceID: 18384}
+      Script: {instanceID: 14764}
     - Class: 114
-      Script: {instanceID: 18394}
+      Script: {instanceID: 14774}
     - Class: 114
-      Script: {instanceID: 18736}
+      Script: {instanceID: 15120}
     - Class: 114
-      Script: {instanceID: 18824}
+      Script: {instanceID: 15210}
     - Class: 114
-      Script: {instanceID: 22180}
+      Script: {instanceID: 15602}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -619,4 +617,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/UnityProjects/TutorialUnityMultiplayer/MultiplayerArchitectureUnity/build/MultiplayerArchitectureUnity2.exe
+  playerPath: C:/UnityProjects/TutorialUnityMultiplayer/MultiplayerArchitectureUnity/build/ClockNet_Example.exe
