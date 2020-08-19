@@ -49,7 +49,7 @@ In previous tutorial it was said that we should split Game Data from Game Logic.
 
 ## Executor, Client, Server
 
-Our IExecutors that have one job: execute a command should do it in a good way if we want to make a multiplayer game. In last tutorial we said that in Client-Server architecture all operations(**commands**) executed locally should be sent to the server and it would confirm those. 
+IExecutors have one job: execute a command. They should behave differently if this were a multiplayer game. In last tutorial we said that in Client-Server architecture all operations(**commands**) executed locally should be sent to the server and it would confirm those. Remember that we should minimize possibility of our local Game Data to differ from server's Game Data. Incoherent data breaks an illusion of the multiplayer game. So IExecutors in our Client-Server architecture should look something like this:
 
 ```
 public interface IExecutor 
