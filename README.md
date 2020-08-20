@@ -10,7 +10,7 @@
 
 3. [Client and Server](tutorial_resources/03clientserver.md)
 
-And if you need... clone this repository and check how this works!
+Also... clone this repository and check how this works!
 
 ## Results
 
