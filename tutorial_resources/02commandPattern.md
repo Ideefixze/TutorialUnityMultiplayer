@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Let's say we have an interface or base class of some Item: potion, scroll or bomb. All of them have something in common: they can be **used**. Potion heals the player, scroll turns player into a cat, bomb makes an explosion. We have our inventory of these items and evertime we click Z,X or C we use them and the game will just execute an interface method ``` Item.use() ```. This is a simple and good solution, but in Object Oriented Programming we can do more than that.
+Let's say we have an interface or base class of some Item. Potion, scroll or bomb are children of that class. All of them have something in common: they can be **used**. Potion heals the player, scroll turns player into a cat, bomb makes an explosion. We have our inventory of these items and evertime we click Z,X or C we use them and the game will just execute an interface method ``` Item.use() ```. This is a simple and good solution, but in Object Oriented Programming we can do more than that.
 
 There are some bugs in our game, so we have to log in file that we executed our ```Item.use()```. Moreover we want to add a feature to our game: replays. In our simple solution there would be a problem in doing this. What if we wanted to add special abilities? Jump mechanics? Interactable objects? Of course it would be doable, but there is a better way to execute a method of any object in our game. We can **encapsulate** triggers for that methods into objects which can be parametrized as we wish.
 
