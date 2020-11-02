@@ -11,7 +11,7 @@ In the simplest form of the Command Design Pattern we have interfaces such as:
 - ICommand - with method ```execute()``` 
 - IExecutor - with method ```executeCommand(Command)```
 
-So in our case: 
+Let's see a different example: 
 ```
 [Serializable]
 public class DestroyTileCommand : ICommand{
@@ -26,7 +26,7 @@ public class DestroyTileCommand : ICommand{
 
 public void Execute(GameData gameData)
  {
-  gameData.map.GetTile(tile.id).Destroy(type);
+  gameData.Map.GetTile(tile.id).Destroy(type);
  }
 
 }
@@ -37,7 +37,7 @@ If we are testing something we can make our Executor object to save every Comman
 
 **Notice that we can't send a reference via network and we have to map item (for example: by id) so we can make sure that we are talking about the same item in the GameData on different computers!**
  
-Command Design Pattern is a huge and powerful tool in structuring your code especially in networking as Commands can be serialized and send to other computers. You can modify your command with ```undo()``` that reverts changes to the GameData. Do you now know how CTRL+Z is implemented in programs like Photoshop? 
+Command Design Pattern is a huge and powerful tool in structuring your code especially in networking as Commands can be serialized and send to other computers. You can modify your command with ```Undo()``` that reverts changes to the GameData. Do you now know how CTRL+Z is implemented in programs like Photoshop? 
 
 What is crucial in here: **don't make your Executions too complex.** All logic should be inside Game Data objects. We just need commands to do some atomic operations that will be sent using network.
 
