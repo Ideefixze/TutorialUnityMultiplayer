@@ -36,3 +36,8 @@ Networking:
 Client/Server implementation:
 - https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-client-socket-example
 - https://docs.microsoft.com/pl-pl/dotnet/framework/network-programming/asynchronous-server-socket-example
+
+
+## Would be my own custom networking be good enough as already existing solutions to this problem?
+
+Probably not. I prefer more Unity centric solution as Mirror or MLAPI, but knowing MVC, Command Pattern and Socket Programming is a skill that widens your perspective on implementing any kind of software. This is also my own self-expression as I spent a lot of time working on it and something made me share it with you because of it's usefulness in learning. 
